@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style> 
+     *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+     }
+     #Contenedor{
+        width: 70%;
+        margin: auto;
+        font-family:Georgia, 'Times New Roman', Times, serif;
+     
+
+     }
+     h1{
+        font-style:italic;
+        text-align: center;
+
+
+     }
+     .grid-container{
+        display: grid;
+        grid-template-columns: 50px,50px;
+        grid-template-rows: 50px 50px;
+        gap: 10px;
+       
+
+     }
+     .iteam{
+        background-color: antiquewhite; 
+      color: blueviolet; 
+      text-align: center;
+
+     }
+     img{
+      float: right;
+      margin-left: 250px;
+      
+     }
+    body{
+        background-color: azure;
+    }
+    button {
+    width: 60px;
+    height: inherit;
+    color:blue;
+    font-size: 1.2em;
+    border-radius: 30px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px gray;
+    border: 2px solid #e94d58;}
+
+
+    </style>
+</head>
+<body>
+    <div id="Contenedor">
+    <h1>Interestellar (Pelicula)</h1>
+    <p>Interstellar (conocida como Interestelar en Hispanoamérica) es 
+    una película épica de drama y ciencia ficción británico-estadounidense y 
+    canadiense de 2014, dirigida por Christopher Nolan y protagonizada por Matthew McConaughey, Anne Hathaway, 
+    Jessica Chastain, Michael Caine y Matt Damon. Ambientada en un futuro distópico donde la humanidad
+     está luchando por sobrevivir, ya que la Tierra se está volviendo inhabitable por el polvo que está 
+     arrasando con todo, cuenta la historia de un grupo de astronautas que viajan a través de un agujero de 
+     gusano cerca de Saturno en busca de un nuevo hogar para la humanidad.</p>
+     
+    </div>
+    <div>
+        <div class="grid-container">
+        <div class="iteam">IMAGEN </div>
+       
+        <img src="https://th.bing.com/th/id/OIP.IQOxL3VjD6CBmIUt3k-wlgHaE4?rs=1&pid=ImgDetMain" alt="Interestellar Cast" width="400px" height="300x">
+    </div>
+    <div class="btn-group">
+        <h2 class="question">Te gusta esta pelicula?</h2>
+        <button class="yes-btn">Yes</button>
+        <button class="no-btn">No</button>
+    </div>
+    
+</body>
+</html>
