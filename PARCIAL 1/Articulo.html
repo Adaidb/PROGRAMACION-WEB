@@ -17,44 +17,120 @@
      
 
      }
-     h1{
-        font-style:italic;
+     h1,h4{
         text-align: center;
+        margin-top: 30px;
+        font-size: 1.8em;
+        color: #333;
+     }
+     h3 + p {
+    color: green;
+}
+        
+
+        p {
+        text-align: justify;
+        line-height: 1.6;
+        margin-top: 20px;
+        color: #444;
 
 
      }
+
      .grid-container{
         display: grid;
-        grid-template-columns: 50px,50px;
-        grid-template-rows: 50px 50px;
+        grid-template-columns: 500px;
+        grid-template-rows: 90px;
         gap: 10px;
        
 
      }
+     
+    
+
      .iteam{
-        background-color: antiquewhite; 
-      color: blueviolet; 
-      text-align: center;
+        background-color: antiquewhite;
+        color: blueviolet;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombras */
+        position: relative;
 
      }
-     img{
-      float: right;
-      margin-left: 250px;
+      img{
+      
+      margin-inline: 250px;
       
      }
     body{
         background-color: azure;
+        padding: 20px;
     }
     button {
-    width: 60px;
-    height: inherit;
-    color:blue;
-    font-size: 1.2em;
-    border-radius: 30px;
-    outline: none;
-    cursor: pointer;
-    box-shadow: 0 2px 4px gray;
-    border: 2px solid #e94d58;}
+        width: 100px;
+        height: 40px;
+        color: white;
+        font-size: 1.2em;
+        border-radius: 30px;
+        outline: none;
+        cursor: pointer;
+        box-shadow: 0 4px 6px gray;
+        border: 2px solid #e94d58;
+        background-color: #e94d58;
+        transition: background-color 0.3s ease;
+   }
+   #ContenedorImagen {
+        display: flex;
+        flex-direction: column; /* Coloca la imagen encima del párrafo */
+        align-items: center;
+        margin-top: 20px;
+     }
+     .btn-group {
+        
+        position: sticky;
+        top: 0; /* Se pegará en la parte superior de la pantalla */
+        background-color: azure;
+        padding: 10px;
+        z-index: 1000;
+        text-align: center;}
+        h2 {
+        margin-bottom: 10px;
+     }
+     .actor-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(150px, 1fr));/* Tres columnas*/
+        grid-template-rows: auto auto;
+        column-gap: 100px;
+        row-gap: 50px;
+        margin: 0 auto; /* Centrar el grid */
+        max-width: 80%; /* Limita el ancho máximo del grid */
+        align-items: center;
+        justify-items: center;
+        background-color: #f0f0f0;
+        padding: 50px;
+        border-radius: 40px;
+     }
+     .actor-grid img:hover {
+        transition: transform 0.3s ease;
+    transform: scale(1.1); /* Efecto de zoom a las imagenes*/
+}
+
+     .actor-grid div {
+        text-align: center;
+     }
+
+     .actor-grid img {
+        width: 150px;
+        height: auto;
+        border-radius: 20px;
+     }
+     
+
+     .actor-grid p{
+        text-align: center;
+     }
 
 
     </style>
@@ -73,15 +149,54 @@
     </div>
     <div>
         <div class="grid-container">
-        <div class="iteam">IMAGEN </div>
+        <div class="iteam">Dato Curioso: Christopher Nolan cultivó 500 acres de maíz para rodar una de las escenas de la película</div>
+        </div>
        
-        <img src="https://th.bing.com/th/id/OIP.IQOxL3VjD6CBmIUt3k-wlgHaE4?rs=1&pid=ImgDetMain" alt="Interestellar Cast" width="400px" height="300x">
-    </div>
+    
+         
+    
     <div class="btn-group">
         <h2 class="question">Te gusta esta pelicula?</h2>
         <button class="yes-btn">Yes</button>
         <button class="no-btn">No</button>
     </div>
+    <div id="ContenedorImagen">
+        <img src="https://th.bing.com/th/id/OIP.IQOxL3VjD6CBmIUt3k-wlgHaE4?rs=1&pid=ImgDetMain" alt="Interestellar Cast">
+      
+    <div id="Contendor2">
+        <p>
+            La película comenzó a desarrollarse en junio de 2006, cuando Spielberg y Paramount Pictures anunciaron planes para una película de ciencia ficción basada en un boceto de ocho páginas escrito por Obst y Thorne. Obst se encargó de la producción. En marzo de 2007, Jonathan Nolan fue contratado para escribir el guion.
+         </p>
+
+    </div>
+     <h4>PERSONAJES RELEVANTES</h4>
+    <div class="actor-grid">
+        
+        <div>
+            <h3>Matthew McConaughey</h3>
+            <p>Personaje: Cooper</p>
+        </div>
+        <div>
+            <h3>Anne Hathaway</h3>
+            <p> Personaje: Brand</p>
+        </div>
+        <div>
+            <h3>Jessica Chastain</h3>
+            <p> Personaje: Murphy</p>
+        </div>
+
+        <div>
+            <img src="https://th.bing.com/th/id/OIP.jVL_TAQydGoOuS4Kqxfo_wHaJZ?rs=1&pid=ImgDetMain" alt="Matthew McConaughey">
+        </div>
+        <div>
+            <img src="https://celebmafia.com/wp-content/uploads/2015/01/anne-hathaway-2015-afi-awards-in-los-angeles_1.jpg" alt="Anne Hathaway">
+        </div>
+        <div>
+            <img src="https://www.hawtcelebs.com/wp-content/uploads/2017/11/jessica-chastain-at-ampas-9th-annual-governors-awards-in-hollywood-11-11-2017-3.jpg" alt="Jessica Chastain">
+        </div>
+        
+      </div>
+    
     
 </body>
 </html>
