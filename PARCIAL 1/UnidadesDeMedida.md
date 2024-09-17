@@ -1,6 +1,6 @@
 # <span style="color:yellow">UNIDADES DE MEDIDA
 
-
+Estrella Adai Diaz Bartolon 22100181
 ## <span style="color: purple">Unidades Absolutas
 Las <span style="color:red">unidades absolutas </span>son aquellas que tienen un valor fijo, independientemente del entorno en el que se utilicen. Estas unidades son útiles cuando se necesita un control preciso sobre el diseño. Sin embargo, no se adaptan bien a diferentes tamaños de pantalla y resoluciones, por lo que se suelen usar en contextos muy específicos como impresión o diseño para dispositivos específicos.
 
