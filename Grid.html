@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimpiezaTec lo mejor de lo mejor</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px; /* Ajustar padding para evitar crecimiento */
+            font-size: 1.5em;
+            z-index: 1000;
+            display: flex; /* Usar flex para la alineación */
+            flex-direction: column; /* Mantener elementos en columna */
+          
+        }
+
+        .ContenedorG {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap; /* Permitir que los elementos se envuelvan si es necesario */
+            justify-content: center; /* Centrar los elementos */
+            max-width: 100%; /* Evitar que se desborden */
+        }
+
+        .item {
+            background-color: #444;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 15px;
+            text-align: center;
+            width: 100px; /* Ancho fijo para evitar crecimiento */
+            max-width: 100px; /* Máximo ancho para evitar desbordamiento */
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            
+          
+            
+        }
+
+        .item:hover {
+            transform: scale(1.05); /* Pequeño zoom al hacer hover */
+            background-color: #555;
+        }
+
+        .body {
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            flex: 1;
+            background-color: #ffffff;
+        }
+
+        .menu {
+            background-color: #fafafa;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu .box {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu .box:hover {
+            transform: scale(1.05);
+        }
+
+        .main {
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .main img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .main h2, .main p {
+            margin: 10px 0;
+        }
+
+        .right {
+            background-color: #fafafa;
+            padding: 20px;
+        }
+
+        .right .box {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .right .box:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            flex: 0 1 60px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #555;
+            color: white;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>LimpiezaTEC</h1>
+            </div>
+            <div class="ContenedorG">
+                <div class="item">Home</div>
+                <div class="item">Hogar & Jardín</div>
+                <div class="item">Cocina</div>
+                <div class="item">Tecnología</div>
+                <div class="item">Salud y Ocio</div>
+                <div class="item">Más</div>
+            </div>
+            <div>
+                <button>Suscribir</button>
+            </div>
+        </div>
+        <div class="body">
+            <div class="menu">
+                <h3>Lo último</h3>
+                <div class="box">
+                    <h4>Contenido</h4>
+                </div>
+                <div class="box">
+                    <h4>Contenido</h4>
+                </div>
+                <div class="box">
+                    <h4>Contenido</h4>
+                </div>
+                <div class="box">
+                    <h4>Contenido</h4>
+                </div>
+            </div>
+            <div class="main">
+                <img src="https://via.placeholder.com/600x300" alt="Imagen Principal">
+                <h2>14 Hola joham despiues de mil intentos y chat gpt aqui tienes tu pagina</h2>
+                <p>djhcvwjwev sjc sh.</p>
+                <div class="box">
+                    <h3>Título 1</h3>
+                    <p>Contenido de la caja 1.</p>
+                </div>
+                <div class="box">
+                    <h3>Título 2</h3>
+                    <p>Contenido de la caja 2.</p>
+                </div>
+                <div class="box">
+                    <h3>Título 3</h3>
+                    <p>Contenido de la caja 3.</p>
+                </div>
+            </div>
+            <div class="right">
+                <div class="box">
+                    <h3>Ofertas Diarias</h3>
+                    <p>Iphone 16</p>
+                </div>
+                <div class="box">
+                    <h3>Mejor Precio</h3>
+                    <p>Tecnm </p>
+                </div>
+                <div class="box">
+                    <h3>Subscripciones</h3>
+                    <p>Hkjebiwbrvkeb</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Pie de Página</p>
+        </div>
+    </div>
+</body>
+</html>
