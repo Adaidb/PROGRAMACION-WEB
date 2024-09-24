@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LimpiezaTec lo mejor de lo mejor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -30,20 +31,23 @@
             top: 0;
             background-color: #333;
             color: white;
-            padding: 10px 20px; /* Ajustar padding para evitar crecimiento */
+            padding: 10px 20px;
             font-size: 1.5em;
             z-index: 1000;
-            display: flex; /* Usar flex para la alineación */
-            flex-direction: column; /* Mantener elementos en columna */
-          
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
         }
 
         .ContenedorG {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap; /* Permitir que los elementos se envuelvan si es necesario */
-            justify-content: center; /* Centrar los elementos */
-            max-width: 100%; /* Evitar que se desborden */
+            flex-wrap: nowrap;
+            justify-content: flex-start;
         }
 
         .item {
@@ -53,23 +57,22 @@
             color: white;
             font-size: 15px;
             text-align: center;
-            width: 100px; /* Ancho fijo para evitar crecimiento */
-            max-width: 100px; /* Máximo ancho para evitar desbordamiento */
+            width: 100px;
+            max-width: 100px;
             cursor: pointer;
             transition: transform 0.3s ease, background-color 0.3s ease;
-            
-          
-            
         }
 
         .item:hover {
-            transform: scale(1.05); /* Pequeño zoom al hacer hover */
+            transform: scale(1.05);
             background-color: #555;
         }
 
         .body {
             display: grid;
-            grid-template-columns: 1fr 3fr 1fr;
+            grid-template-columns: 20% 60% 20%;
+            grid-template-areas:
+            "Menu Main Right";
             gap: 20px;
             padding: 20px;
             flex: 1;
@@ -77,7 +80,10 @@
         }
 
         .menu {
+            grid-area: Menu;
             background-color: #fafafa;
+            border-right: 5px inset #666;
+            border-bottom: 5px inset #000000;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -97,22 +103,69 @@
         }
 
         .main {
+            grid-area: Main;
             background-color: #f9f9f9;
+            border-right: 5px inset #666;
+            border-bottom: 5px inset #000000;
             padding: 20px;
-        }
-
-        .main img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column; /* Column layout */
+            align-items: center; /* Center horizontally */
+            text-align: center; /* Center text */
+            justify-content: flex-start; /* Align items at the top */
         }
 
         .main h2, .main p {
             margin: 10px 0;
+            max-width: 800px; /* Limit width for better readability */
+        }
+
+        .gallery-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .gallery-item {
+            flex: 1;
+            max-width: 30%;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .gallery-item p {
+            padding: 10px;
+            font-size: 1.1em;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
         }
 
         .right {
+            grid-area: Right;
             background-color: #fafafa;
+            border-right: 5px inset #666;
+            border-bottom: 5px inset #000000;
             padding: 20px;
         }
 
@@ -156,19 +209,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <div>
-                <h1>LimpiezaTEC</h1>
-            </div>
             <div class="ContenedorG">
-                <div class="item">Home</div>
-                <div class="item">Hogar & Jardín</div>
-                <div class="item">Cocina</div>
-                <div class="item">Tecnología</div>
-                <div class="item">Salud y Ocio</div>
-                <div class="item">Más</div>
-            </div>
-            <div>
-                <button>Suscribir</button>
+                <h1>Curiosidades-Blog</h1>
+                <div class="item">Inicio</div>
+                <div class="item">Películas</div>
+                <div class="item">Personajes</div>
+                <div class="item">Curiosidades</div>
+                <div class="item">Contacto</div>
             </div>
         </div>
         <div class="body">
@@ -188,20 +235,41 @@
                 </div>
             </div>
             <div class="main">
-                <img src="https://via.placeholder.com/600x300" alt="Imagen Principal">
-                <h2>14 Hola joham despiues de mil intentos y chat gpt aqui tienes tu pagina</h2>
-                <p>djhcvwjwev sjc sh.</p>
+                <div class="gallery-container">
+                    <div class="gallery-item" onclick="window.location.href='https://es.wikipedia.org/wiki/El_Señor_de_los_Anillos:_La_Comunidad_del_Anillo';">
+                        <img src="https://static-1.ivoox.com/audios/9/3/6/8/641501138639_XXL.jpg" alt="La Comunidad del Anillo">
+                        <p>La Comunidad del Anillo</p>
+                    </div>
+                    <div class="gallery-item" onclick="window.location.href='https://es.wikipedia.org/wiki/El_Señor_de_los_Anillos:_Las_dos_torres';">
+                        <img src="https://th.bing.com/th/id/R.8dc1aed819d60752d8ca28a467f9ae08?rik=T89SaLmKCcxAww&riu=http%3a%2f%2fradioexpresfm.com%2fwp-content%2fuploads%2f2022%2f09%2f63127e5336d2e.jpeg&ehk=ohUVyZNfLrCmW2wwu71UWF99UioGjXX1V9GwDCrJlNs%3d&risl=&pid=ImgRaw&r=0" alt="Las Dos Torres">
+                        <p>Las Dos Torres</p>
+                    </div>
+                    <div class="gallery-item" onclick="window.location.href='https://es.wikipedia.org/wiki/El_Señor_de_los_Anillos:_El_retorno_del_Rey';">
+                        <img src="https://www.latercera.com/resizer/pXPSz6_Tt065mIaJWPV5tX6SrIw=/900x600/filters:focal(262x358:272x348)/cloudfront-us-east-1.images.arcpublishing.com/copesa/KWYO3W2Y3RABLI6BCYIRHZF6GQ.jpg" alt="El Retorno del Rey">
+                        <p>El Retorno del Rey</p>
+                    </div>
+                </div>
+                <h2>El Universo de El Señor de los Anillos: Guía Completa de las Películas</h2>
+                <p>La trilogía cinematográfica de El Señor de los Anillos es una de las adaptaciones más aclamadas 
+                    de la literatura fantástica. Basada en las novelas de J.R.R. Tolkien, las películas dirigidas por 
+                    Peter Jackson han dejado una huella imborrable en la cultura popular, transportando a los espectadores a la 
+                    Tierra Media, un mundo lleno de héroes, criaturas mágicas y paisajes impresionantes.</p>
                 <div class="box">
-                    <h3>Título 1</h3>
-                    <p>Contenido de la caja 1.</p>
+                    <h3>1-El Señor de los Anillos: La Comunidad del Anillo (2001)</h3>
+                    <p>Sinopsis: Frodo Bolsón, un hobbit de la Comarca, se embarca en una misión peligrosa para destruir el Anillo Único, un artefacto de poder inmenso creado por el malvado Sauron. Con la ayuda de un grupo variado de personajes, 
+                        incluyendo a Aragorn, Legolas y Gandalf, debe enfrentar peligros y tentaciones en su camino hacia el Monte del Destino.</p>
+                    <p>Premios: Ganadora de 4 premios Oscar, incluyendo Mejor Fotografía y Mejor Banda Sonora.</p>
                 </div>
                 <div class="box">
-                    <h3>Título 2</h3>
-                    <p>Contenido de la caja 2.</p>
+                    <h3>2-El Señor de los Anillos: Las Dos Torres (2002)</h3>
+                    <p>Sinopsis: La Comunidad se ha separado. Frodo y Sam continúan su viaje hacia Mordor acompañados por la ambigua criatura Gollum. Mientras tanto, Aragorn, Legolas y Gimli persiguen a los orcos que han capturado a Merry y Pippin. La guerra se cierne sobre Rohan, y una nueva alianza debe formarse para resistir la creciente sombra de Sauron.</p>
+                    <p>Premios: Ganadora de 2 premios Oscar, incluyendo Mejores Efectos Visuales.</p>
                 </div>
                 <div class="box">
-                    <h3>Título 3</h3>
-                    <p>Contenido de la caja 3.</p>
+                    <h3>3-El Señor de los Anillos: El Retorno del Rey (2003)</h3>
+                    <p>Sinopsis: La batalla final por la Tierra Media está por comenzar. Frodo y Sam, guiados por Gollum, se acercan a Mordor mientras el resto de sus compañeros luchan para distraer a las fuerzas de Sauron. El destino de todos los pueblos libres depende del éxito de su misión. ¿Podrá la fortaleza de los hobbits 
+                        superar la corrupción del Anillo Único?</p>
+                    <p>Premios: Ganadora de 11 premios Oscar, incluyendo Mejor Película y Mejor Director.</p>
                 </div>
             </div>
             <div class="right">
@@ -220,7 +288,7 @@
             </div>
         </div>
         <div class="footer">
-            <p>Pie de Página</p>
+            <p>© 2024 Blog de El Señor de los Anillos. Todos los derechos reservados. By Estrella Diaz, Joham Barberena</p>
         </div>
     </div>
 </body>
