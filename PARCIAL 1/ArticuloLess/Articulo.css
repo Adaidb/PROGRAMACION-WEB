@@ -6,7 +6,7 @@
 #Contenedor {
   width: 70%;
   margin: auto;
-  background-color: azure;
+  background-color: rgba(120, 192, 223, 0.452);
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 #Contenedor h1,
@@ -47,7 +47,7 @@ p {
 .btn-group {
   position: sticky;
   top: 0;
-  background-color: azure;
+  background-color: rgba(120, 192, 223, 0.452);
   padding: 10px;
   z-index: 1000;
   text-align: center;
