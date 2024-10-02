@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+access-control-allow-origin: *
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+cache-control: private
+content-encoding: gzip
+content-type: application/json; charset=utf-8
+date: Mon, 30 Sep 2024 12:53:33 GMT
+etag: W/"90-JNDvO20Nfq3UtbRSyc773TkbMQ8"
+server: Google Frontend
+transfer-encoding: chunked
+vary: Accept-Encoding
+x-cloud-trace-context: 9180752a49fbda1bc8ae500aa6891142
+x-powered-by: Express
+
+{
+  "type": "dad",
+  "setup": "Why do fathers take an extra pair of socks when they go golfing?",
+  "punchline": "In case they get a hole in one!",
+  "id": 378
+}
