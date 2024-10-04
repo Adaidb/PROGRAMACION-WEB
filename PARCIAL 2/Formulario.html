@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Actividades Diarias</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+            <h2>Formulario de Actividades Diarias</h2>
+            <form action="URL" method="GET" class="pure-form pure-form-stacked">
+              
+               
+                    <legend>Datos Personales</legend>
+
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" class="pure-input-1" placeholder="Escribe tu nombre" required>
+
+                    <label for="apellidoP">Apellido Paterno</label>
+                    <input type="text" name="apellidoP" id="apellidoP" class="pure-input-1" placeholder="Escribe tu apellido paterno" required>
+
+                    <label for="apellidoM">Apellido Materno</label>
+                    <input type="text" name="apellidoM" id="apellidoM" class="pure-input-1" placeholder="Escribe tu apellido materno" required>
+               
+
+              
+               
+                    <legend>Actividades Diarias</legend>
+
+                    <label for="actividad1">¿A qué hora te despiertas?</label>
+                    <input type="time" name="horaDespertar" id="actividad1" class="pure-input-1">
+
+                    <label for="actividad2">¿Qué haces primero al empezar tu día?</label>
+                    <input type="text" name="primeraActividad" id="actividad2" class="pure-input-1" placeholder="Escribe tu primera actividad">
+
+                    <label for="actividad3">¿Cuánto tiempo dedicas a hacer ejercicio?</label>
+                    <select name="tiempoEjercicio" id="actividad3" class="pure-input-1">
+                        <option value="0-30min">0-30 minutos</option>
+                        <option value="30-60min">30-60 minutos</option>
+                        <option value="1hr+">Más de 1 hora</option>
+                        <option value="nada">No hago ejercicio</option>
+                    </select>
+                
+
+                <!-- Botones -->
+                <div class="pure-button-group" role="group" aria-label="Botones">
+                    <input type="submit" class="pure-button pure-button-primary" value="Enviar">
+                    <input type="reset" class="pure-button pure-button-secondary" value="Limpiar">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
