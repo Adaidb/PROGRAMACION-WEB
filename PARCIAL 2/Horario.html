@@ -1,147 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Horario</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+        font-family: cursive;
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: #e9e9e9; /* Color gris para las filas impares */
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #ffffff; /* Color blanco para las filas pares */
+      }
+      /* Color de fondo cuando se pasa el mouse sobre cualquier fila */
+      tbody tr:hover {
+        background-color: rgb(209, 169, 219);
+      }
+      td:nth-child(1) {
+        font-weight: bold; /* Aplica negritas a la primera columna */
+        font-family: monospace;
+      }
+      /* Estilo para pantallas grandes */
+      @media screen and (min-width: 768px) {
+        th,
+        td {
+          padding: 15px;
+          font-size: 16px;
         }
+      }
+
+      /* Estilo para pantallas medianas (tabletas) */
+      @media screen and (max-width: 768px) {
+        th,
+        td {
+          padding: 8px;
+          font-size: 14px;
+        }
+      }
+      @media screen and (max-width: 480px) {
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+          display: block;
+          overflow-x: auto; /* Permite desplazar horizontalmente la tabla */
+          white-space: nowrap; /* Evita que la tabla se ajuste en varias líneas */
         }
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-            font-family:cursive;
+        th,
+        td {
+          font-size: 12px;
+          padding: 6px;
         }
-        
-
-        tbody tr:nth-child(odd) {
-            background-color: #e9e9e9; /* Color gris para las filas impares */
-        }
-      
-        tbody tr:nth-child(even) {
-            background-color: #ffffff; /* Color blanco para las filas pares */
-        }
-        /* Color de fondo cuando se pasa el mouse sobre cualquier fila */
-        tbody tr:hover {
-            background-color: rgb(209, 169, 219);
-        }
-        td:nth-child(1) {
-            font-weight: bold; /* Aplica negritas a la primera columna */
-            font-family: monospace;
-        }
-        /* Estilo para pantallas grandes */
-        @media screen and (min-width: 768px) {
-            th, td {
-                padding: 15px;
-                font-size: 16px;
-            }
-        }
-
-        /* Estilo para pantallas medianas (tabletas) */
-        @media screen and (max-width: 768px) {
-            th, td {
-                padding: 8px;
-                font-size: 14px;
-            }
-        }
-        @media screen and (max-width: 480px) {
-            table {
-                display: block;
-                overflow-x: auto; /* Permite desplazar horizontalmente la tabla */
-                white-space: nowrap; /* Evita que la tabla se ajuste en varias líneas */
-            }
-            th, td {
-                font-size: 12px;
-                padding: 6px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <table>
-        <thead>
-            <tr>
-                <th>Hora</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>7-8am</td>
-                <td>Programacion Web <br><p>S6</p></td>
-                <td>Programacion Web <br><p>S6</p></td>
-                <td>Programacion Web <br><p>S6</p></td>
-                <td>Programacion Web <br><p>S6</p></td>
-                <td>Programacion Web <br><p>S6</p></td>
-            </tr>
-            <tr>
-                <td>8-9am</td>
-                <td>-</td>
-                <td rowspan="2">Fund. Ing. Software <br><p>S8</p></td>
-                <td>-</td>
-                <td rowspan="2">Fund. Ing. Software <br><p>H3-04</p></td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td>9-10am</td>
-                <td>-</td>
-                <td></td>
-                <td>-</td>
-               
-            </tr>
-            <tr>
-                <td>10-11am</td>
-                <td>-</td>
-                <td>Sistemas Operativos <br><p>S7</p></td>
-                <td>-</td>
-                <td>Sistemas Operativos<br><p>S7</p></td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td>11-12pm</td>
-                <td>Fund. Base De Datos</td>
-                <td>Fund. Base De Datos</td>
-                <td>Fund. Base De Datos</td>
-                <td>Fund. Base De Datos</td>
-                <td>Fund. Base De Datos</td>
-            </tr>
-            <tr>
-                <td>12-1pm</td>
-                <td rowspan="2">Sistemas Operativos <br><p>S7</p></td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td>1-2pm</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td>2-3pm</td>
-                <td>Ecuaciones Diferenciales</td>
-                <td>Ecuaciones Diferenciales</td>
-                <td>Ecuaciones Diferenciales</td>
-                <td>Ecuaciones Diferenciales</td>
-                <td>Ecuaciones Diferenciales</td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Lunes</th>
+          <th>Martes</th>
+          <th>Miércoles</th>
+          <th>Jueves</th>
+          <th>Viernes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>7-8am</td>
+          <td>
+            Programacion Web <br />
+            <p>S6</p>
+          </td>
+          <td>
+            Programacion Web <br />
+            <p>S6</p>
+          </td>
+          <td>
+            Programacion Web <br />
+            <p>S6</p>
+          </td>
+          <td>
+            Programacion Web <br />
+            <p>S6</p>
+          </td>
+          <td>
+            Programacion Web <br />
+            <p>S6</p>
+          </td>
+        </tr>
+        <tr>
+          <td>8-9am</td>
+          <td>-</td>
+          <td rowspan="2">
+            Fund. Ing. Software <br />
+            <p>S8</p>
+          </td>
+          <td>-</td>
+          <td rowspan="2">
+            Fund. Ing. Software <br />
+            <p>H3-04</p>
+          </td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>9-10am</td>
+          <td>-</td>
+          <td></td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>10-11am</td>
+          <td>-</td>
+          <td>
+            Sistemas Operativos <br />
+            <p>S7</p>
+          </td>
+          <td>-</td>
+          <td>
+            Sistemas Operativos<br />
+            <p>S7</p>
+          </td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>11-12pm</td>
+          <td>Fund. Base De Datos</td>
+          <td>Fund. Base De Datos</td>
+          <td>Fund. Base De Datos</td>
+          <td>Fund. Base De Datos</td>
+          <td>Fund. Base De Datos</td>
+        </tr>
+        <tr>
+          <td>12-1pm</td>
+          <td rowspan="2">
+            Sistemas Operativos <br />
+            <p>S7</p>
+          </td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>1-2pm</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>2-3pm</td>
+          <td>Ecuaciones Diferenciales</td>
+          <td>Ecuaciones Diferenciales</td>
+          <td>Ecuaciones Diferenciales</td>
+          <td>Ecuaciones Diferenciales</td>
+          <td>Ecuaciones Diferenciales</td>
+        </tr>
+      </tbody>
     </table>
-</body>
+  </body>
 </html>
