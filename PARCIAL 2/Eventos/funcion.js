@@ -6,7 +6,7 @@ console.log(calcularArea(10, 5));
 
 Expresion
 const saludar = function(nombre) {
-    return Hola, ${nombre}!;
+    return Hola, $,{nombre};
 };
 console.log(saludar("Carlos")); 
 
