@@ -9,172 +9,223 @@
  
  <style>
     /* Estilo general */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-html, body {
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background-color: #111;
-}
+    html, body {
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #111;
+    }
 
-.intro-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to right, #111, #444);
-    color: #ffffff;
-    text-align: center;
-    padding: 20px;
-}
+    .intro-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to right, #111, #444);
+        color: #ffffff;
+        text-align: center;
+        padding: 20px;
+    }
 
-.intro-section h1 {
-    font-size: 3rem;
-    font-weight: bold;
-}
+    .intro-section h1 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
 
-.intro-section .form-label,
-.intro-section input {
-    color: black;
-    margin-top: 10px;
-}
+    .intro-section .form-label,
+    .intro-section input {
+        color: black;
+        margin-top: 10px;
+    }
 
-/* Botones en línea */
-.button-group {
-    display: flex;
-    gap: 15px;
-    margin-top: 15px;
-}
+    /* Botones en línea */
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+    }
 
-/* Estilos para el botón animado */
-.animated-button {
-    position: relative;
-    color: #ffffff;
+    /* Estilos para el botón animado */
+    .animated-button {
+        position: relative;
+        color: #ffffff;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        display: inline-block;
+        transition: color 0.4s;
+    }
+
+    .animated-button .text {
+        position: relative;
+        z-index: 1;
+    }
+
+    .animated-button:hover {
+        color: #8d22f2;
+    }
+
+    /* Línea de animación */
+    .animated-button .line {
+        position: absolute;
+        background-color: #8d22f2;
+        transition: transform 0.3s ease;
+    }
+
+    /* Configuración de las líneas para cada borde */
+    .animated-button .line.-right,
+    .animated-button .line.-left {
+        width: 2px;
+        top: 0;
+        bottom: 0;
+        transform: scaleY(0);
+        transition: transform 0.4s ease;
+    }
+
+    .animated-button .line.-top,
+    .animated-button .line.-bottom {
+        height: 2px;
+        left: 0;
+        right: 0;
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    /* Ubicación inicial de las líneas */
+    .animated-button .line.-right {
+        right: 0;
+        transform-origin: top;
+    }
+
+    .animated-button .line.-left {
+        left: 0;
+        transform-origin: bottom;
+    }
+
+    .animated-button .line.-top {
+        top: 0;
+        transform-origin: right;
+    }
+
+    .animated-button .line.-bottom {
+        bottom: 0;
+        transform-origin: left;
+    }
+
+    /* Efecto hover en las líneas */
+    .animated-button:hover .line.-right,
+    .animated-button:hover .line.-left {
+        transform: scaleY(1);
+    }
+
+    .animated-button:hover .line.-top,
+    .animated-button:hover .line.-bottom {
+        transform: scaleX(1);
+    }
+    /* Estilos para el contenedor de resultados */
+    #result-container {
+        display: none; /* Se muestra al hacer la consulta */
+        margin-top: 40px;
+        color: #fff;
+    }
+
+    .content-wrapper {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px;
+        border-top: 1px solid #444;
+    }
+
+    .text-content {
+        flex: 1;
+        font-size: 20px;
+        color: #ddd;
+    }
+
+    .text-content h3 {
+        font-size: 50px;
+        color: #fff;
+        margin-bottom: 10px;
+    }
+
+    .text-content p {
+        margin: 8px 0;
+    }
+
+    .image-content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-content img {
+        max-width: 100%;
+        max-height: 400px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    /* Estilo personalizado para el contenedor de fecha */
+    .mb-3 {
+        width: 300px;
+        background-color: #222;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Estilo para el label */
+    .mb-3 .form-label {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    /* Estilo para el input de fecha */
+    .mb-3 .form-control {
+        color: #ffffff;
+        background-color: #333;
+        border: 1px solid #555;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 1rem;
+        box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .mb-3 .form-control:focus {
+        outline: none;
+        border-color: #f26522;
+        box-shadow: 0px 0px 5px rgba(242, 101, 34, 0.5);
+    }
+
+    #backButton {
     padding: 10px 20px;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: inline-block;
-    transition: color 0.4s;
-}
-
-.animated-button .text {
-    position: relative;
-    z-index: 1;
-}
-
-.animated-button:hover {
-    color: #f26522;
-}
-
-/* Línea de animación */
-.animated-button .line {
-    position: absolute;
-    background-color: #f26522;
-    transition: transform 0.3s ease;
-}
-
-/* Configuración de las líneas para cada borde */
-.animated-button .line.-right,
-.animated-button .line.-left {
-    width: 2px;
-    top: 0;
-    bottom: 0;
-    transform: scaleY(0);
-    transition: transform 0.4s ease;
-}
-
-.animated-button .line.-top,
-.animated-button .line.-bottom {
-    height: 2px;
-    left: 0;
-    right: 0;
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-}
-
-/* Ubicación inicial de las líneas */
-.animated-button .line.-right {
-    right: 0;
-    transform-origin: top;
-}
-
-.animated-button .line.-left {
-    left: 0;
-    transform-origin: bottom;
-}
-
-.animated-button .line.-top {
-    top: 0;
-    transform-origin: right;
-}
-
-.animated-button .line.-bottom {
-    bottom: 0;
-    transform-origin: left;
-}
-
-/* Efecto hover en las líneas */
-.animated-button:hover .line.-right,
-.animated-button:hover .line.-left {
-    transform: scaleY(1);
-}
-
-.animated-button:hover .line.-top,
-.animated-button:hover .line.-bottom {
-    transform: scaleX(1);
-}
-/* Estilos para el contenedor de resultados */
-#result-container {
-    display: none; /* Se muestra al hacer la consulta */
-    margin-top: 40px;
+    font-size: 1rem;
     color: #fff;
-}
-
-.content-wrapper {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    border-top: 1px solid #444;
-}
-
-.text-content {
-    flex: 1;
-    font-size: 20px;
-    color: #ddd;
-}
-
-.text-content h3 {
-    font-size: 50px;
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-.text-content p {
-    margin: 8px 0;
-}
-
-.image-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.image-content img {
-    max-width: 100%;
-    max-height: 400px;
-    border: 1px solid #ddd;
+    background-color: #555;
+    border: none;
     border-radius: 5px;
-}
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    #backButton:hover {
+        background-color: #444;
+    }
+
 
  </style>   
 </head>
@@ -183,8 +234,8 @@ html, body {
     <div class="intro-section" id="intro-section">
 
 
-        <img src="https://th.bing.com/th/id/R.babed827cebebf236f71a2bf1f2bcd4c?rik=YRZhpbH0T81t9g&riu=http%3a%2f%2fcdn.wallpapersafari.com%2f5%2f63%2fcbZ6VN.png&ehk=OXu1EXojjaThyf%2bXKdZ9NUCdHXCk6CL8EKmQl8FxGQ4%3d&risl=&pid=ImgRaw&r=0" alt="Astronomy Image" class="img-fluid" style="max-width: 40%; height: auto; margin-bottom: 20px;">
-        <h1>Astronomy Picture of your Birth Day</h1>
+        <img src=".\Img\NasaLogo.png" style="width: auto; height: 350px;">
+        <h1>Imagen Astronomica de tu Día de Nacimiento</h1>
         <div class="mb-3">
             <label for="birthDate" class="form-label">Ingresa tu fecha de nacimiento:</label>
             <input type="date" class="form-control" id="birthDate" placeholder="YYYY-MM-DD">
@@ -218,7 +269,6 @@ html, body {
 <div class="container" id="result-container">
     <div class="content-wrapper mt-5">
         <div class="text-content">
-            
             <h3 id="title"></h3>
             <p><strong>Fecha:</strong> <span id="date"></span></p>
             <p id="description"></p>
@@ -226,6 +276,9 @@ html, body {
         <div class="image-content">
             <img id="image" alt="Astronomy Picture of the Day" class="img-fluid">
         </div>
+    </div>
+    <div class="text-center mt-4">
+        <button id="backButton" class="btn btn-secondary">Regresar</button>
     </div>
 </div>
 
@@ -326,6 +379,18 @@ html, body {
         };
 
         xhr.send();
+    });
+
+    document.getElementById('backButton').addEventListener('click', () => {
+    // Ocultar el contenedor de resultados
+    document.getElementById("result-container").style.display = "none";
+    // Mostrar la sección de introducción
+    document.getElementById("intro-section").style.display = "flex";
+    // Limpiar el contenido de los resultados
+    document.getElementById("title").innerText = '';
+    document.getElementById("date").innerText = '';
+    document.getElementById("description").innerText = '';
+    document.getElementById("image").src = '';
     });
 </script>
 
