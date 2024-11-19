@@ -4,6 +4,7 @@ const multer = require("multer");
 const pdf = require("pdfkit");
 const fs = require("fs");
 const cors = require("cors");
+const Validator =  require("express-validator");
  
 const app = express();
 const folder = path.join(__dirname, "archivos");
