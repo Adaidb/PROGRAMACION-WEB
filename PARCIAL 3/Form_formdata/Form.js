@@ -1,91 +1,150 @@
-const express = require("express");
-const path = require("path");
-const multer = require("multer");
-const pdf = require("pdfkit");
-const fs = require("fs");
-const cors = require("cors");
-const { check, validationResult} = require("express-validator");
- 
-const app = express();
-const folder = path.join(__dirname, "archivos");
- 
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const { jsPDF } = require('jspdf');
+const fs = require('fs');
+const cors = require('cors');
+const { check, validationResult } = require('express-validator');
 
+const app = express();
+const mysql = require('mysql2');
+
+// Configuración de conexión
+const db = mysql.createConnection({
+    host: 'localhost', 
+    user: 'root',      
+    password: 'Helloword123',     
+    database: 'formularioDB' // Nombre de la base de datos 
+});
+
+db.connect(err => {
+    if (err) {
+        console.error('Error al conectar a la base de datos:', err);
+        return;
+    }
+    console.log('Conexión exitosa a la base de datos.');
+});
+
+// Configuración de CORS
+app.use(cors());
+
+// Configuración de almacenamiento para multer
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: function (req, file, cb) {
+        const folder = path.join(__dirname, '/archivos');
+        if (!fs.existsSync(folder)) {
+            fs.mkdirSync(folder, { recursive: true });
+        }
         cb(null, folder);
     },
-    filename: (req, file, cb) => {
+    filename: function (req, file, cb) {
         cb(null, file.originalname);
-    },
+    }
 });
- 
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        const allowedExtensions = [".jpg", ".jpeg", ".png"];
-        const extension = path.extname(file.originalname).toLowerCase();
-        if (allowedExtensions.includes(extension)) {
-            cb(null, true);
-        } else {
-            cb(new Error("El archivo debe ser una imagen (.jpg, .jpeg, .png)"));
-        }
-    },
-});
- 
+
+const upload = multer({ storage: storage });
+
+// Middleware para procesar JSON y datos de formularios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
- 
-app.post("/Formulario",upload.single("archivo"),
-    [
-        check("Nombre").notEmpty().withMessage("El nombre no puede estar vacío").isLength({ min: 3, max: 20 }).withMessage("El nombre debe tener entre 3 y 20 caracteres"),
-    ],(req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errores: errors.array() });
+
+// Servir la carpeta Archivos como estática para acceder a los archivos generados
+app.use('/archivos', express.static(path.join(__dirname, '/archivos')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/Formulario.html'));
+});
+
+// Ruta para  envío  formulario
+//app.post(
+    // '/FormData',
+    // upload.single('archivos'),
+    // [
+    //     check('Nombre').isLength({ min: 2 }).withMessage('El nombre debe tener al menos 2 caracteres.'),
+    //     check('Apellido').isLength({ min: 2 }).withMessage('El apellido debe tener al menos 2 caracteres.')
+    // ],
+    // (req, res) => {
+    //     console.log('Body recibido:', req.body);
+
+    //     const errors = validationResult(req);
+    //     console.log('Errores de validación:', errors.array());
+
+    //     if (!errors.isEmpty()) {
+    //         return res.status(400).json({ errors: errors.array() });
+    //     }
+
+    //     const uploadedFile = req.file;
+
+    //     if (!uploadedFile) {
+    //         return res.status(400).json({ error: 'No se subió ningún archivo' });
+    //     }
+
+    //     try {
+    //         // Leer la imagen subida como Base64
+    //         const imagePath = path.join(__dirname, '/archivos', uploadedFile.filename);
+    //         const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' });
+
+    //         // Crear el PDF usando jsPDF
+    //         const doc = new jsPDF();
+    //         doc.text(`Nombre: ${req.body.Nombre}`, 10, 10);
+    //         doc.text(`Apellido: ${req.body.Apellido}`, 10, 20);
+    //         doc.text(`Archivo recibido: ${uploadedFile.originalname}`, 10, 30);
+
+    //         // Agregar la imagen al PDF
+    //         const fileExtension = path.extname(uploadedFile.originalname).toLowerCase();
+    //         const imageFormat = fileExtension === '.png' ? 'PNG' : 'JPEG';
+    //         doc.addImage(`data:image/${imageFormat};base64,${imageBase64}`, imageFormat, 10, 40, 100, 100);
+
+    //         // Generar un nombre único para el PDF basado en el Nombre del formulario
+    //         const sanitizedNombre = req.body.Nombre.replace(/[^a-zA-Z0-9]/g, '_'); // Reemplaza caracteres especiales
+    //         const pdfFileName = `${sanitizedNombre}.pdf`;
+
+    //         // Guardar el PDF en la carpeta archivos
+    //         const pdfPath = path.join(__dirname, '/archivos', pdfFileName);
+    //         const pdfBuffer = doc.output('arraybuffer');
+    //         fs.writeFileSync(pdfPath, Buffer.from(pdfBuffer));
+
+    //         console.log('PDF guardado en:', pdfPath);
+    //         res.json({ message: 'PDF generado correctamente', pdfUrl: `/archivos/${pdfFileName}` });
+    //     } catch (error) {
+    //         console.error('Error al generar el PDF:', error);
+    //         res.status(500).json({ error: 'Error en la generación del PDF' });
+    //     }
+    // }
+//);
+app.post('/FormData', upload.single('archivos'), (req, res) => {
+    const { Nombre, Apellido } = req.body;
+
+    // Verificar si ya existe en la base de datos
+    const checkSql = 'SELECT * FROM Formulario WHERE nombre = ? AND apellido = ?';
+    db.query(checkSql, [Nombre, Apellido], (err, results) => {
+        if (err) {
+            console.error('Error al verificar en la base de datos:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
         }
- 
-        if (!req.file) {
-            return res.status(400).send("No se proporcionó un archivo o el formato no es válido");
+
+        if (results.length > 0) {
+            // Ya existe
+            return res.status(400).json({ message: 'El registro ya existe en la base de datos' });
         }
- 
-        try {
-            console.log(`Archivo recibido: ${req.file.originalname}`);
-            console.log(`Hola ${req.body.Nombre}`);
- 
-            const doc = new pdf();
-            const pdfPath = path.join(folder, `${req.body.Nombre}.pdf`);
-            const pdfStream = fs.createWriteStream(pdfPath);
- 
-            doc.pipe(pdfStream);
-            doc.fontSize(45).fillColor("blue").text(`Pdf creado. Su nombre es: ${req.body.Nombre}`, { align: "center" });
- 
-            const imagePath = req.file.path;
-            doc.image(imagePath, {
-                fit: [250, 300],
-                align: "center",
-                valign: "center",
-            });
- 
-            doc.end();
- 
-            pdfStream.on("finish", () => {
-                console.log("PDF creado exitosamente.");
-                res.setHeader("Content-Type", "application/pdf");
-                res.setHeader("Content-Disposition", `inline; filename="${req.body.Nombre}.pdf"`);
-                res.sendFile(pdfPath);
-            });
- 
-            pdfStream.on("error", (err) => {
-                throw err;
-            });
-        } catch (err) {
-            console.error(err);
-            res.status(400).send("Error: " + err.message);
-        }
-    }
-);
- 
+
+        // Si no existe, insertar en la base de datos
+        const insertSql = 'INSERT INTO Formulario (nombre, apellido, pdf_path) VALUES (?, ?, ?)';
+        db.query(insertSql, [Nombre, Apellido, `/archivos/${req.file.filename}`], (err, result) => {
+            if (err) {
+                console.error('Error al insertar en la base de datos:', err);
+                return res.status(500).json({ error: 'Error al guardar en la base de datos' });
+            }
+
+            console.log('Datos guardados en la base de datos:', result);
+            return res.json({ message: 'Datos guardados correctamente', pdfUrl: `/archivos/${req.file.filename}` });
+        });
+    });
+});
+
+
+
+// Iniciar el servidor
 app.listen(3000, () => {
-    console.log("Aplicación escuchando en el puerto 3000");
+    console.log('Servidor escuchando en http://localhost:3000');
 });

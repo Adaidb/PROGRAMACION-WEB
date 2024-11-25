@@ -1,25 +1,249 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario con Fetch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <title>Generador de PDF</title>
+    <style>
+        body {
+            font-family: Quicksand, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid gray;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: center;
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <h2>Formulario de Registro</h2>
-    <form id="Formulario">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="Nombre" name="Nombre" required><br><br>
-
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required><br><br>
-
-        <label for="archivo">Subir Archivo:</label>
-        <input type="file" id="archivo" name="archivo" required><br><br>
-
-        <button type="button" id="btnEnviar">Enviar</button>
+    <h1>Formulario</h1>
+    <form id="formulario" enctype="multipart/form-data">
+        <label for="Nombre">Nombre:</label>
+        <input type="text" id="Nombre" name="Nombre" required>
+    
+        <label for="Apellido">Apellido:</label>
+        <input type="text" id="Apellido" name="Apellido" required>
+    
+        <label for="Archivo">Subir Archivo (JPG, JPEG, PNG):</label>
+        <input type="file" id="archivos" name="archivos" accept="image/jpeg, image/png" required>
+    
+        <button type="submit">Enviar</button>
     </form>
+    
+    <div class="result" id="resultado"></div>
+    
+    <script>
+        document.getElementById('formulario').addEventListener('submit', async function (event) {
+            event.preventDefault();
+        
+            // Limpia mensajes previos
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = ''; // Limpia el contenido anterior
+        
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+        
+            // Validaciones del lado del cliente
+            const nombre = document.getElementById('Nombre').value.trim();
+            const apellido = document.getElementById('Apellido').value.trim();
+            let hasErrors = false;
+        
+            if (nombre.length < 2) {
+                showError('Nombre', 'El nombre debe tener al menos 2 caracteres.');
+                hasErrors = true;
+            }
+        
+            if (apellido.length < 2) {
+                showError('Apellido', 'El apellido debe tener al menos 2 caracteres.');
+                hasErrors = true;
+            }
+        
+            if (hasErrors) {
+                return; // Detener el envío si hay errores de validación en el cliente
+            }
+        
+            // Crear el FormData
+            const formData = new FormData(this);
+        
+            try {
+                const response = await fetch('http://localhost:3000/FormData', {
+                    method: 'POST',
+                    body: formData
+                });
+        
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log('Errores recibidos:', errorData);
+        
+                    if (errorData.message) {
+                        // Mostrar mensaje específico si ya existe el registro
+                        showPersistentMessage('error', errorData.message);
+                        return;
+                    }
+        
+                    if (errorData.errors) {
+                        // Mostrar errores específicos de validación
+                        errorData.errors.forEach(err => {
+                            showError(err.param, err.msg);
+                        });
+                        return;
+                    }
+        
+                    throw new Error(errorData.error || 'Error desconocido');
+                }
+        
+                const result = await response.json();
+                showPersistentMessage('success', `
+                    ${result.message}<br>
+                    <a href="http://localhost:3000${result.pdfUrl}" target="_blank">Descargar PDF</a>
+                `);
+            } catch (error) {
+                showPersistentMessage('error', 'Ocurrió un error: ' + error.message);
+            }
+        });
+        
+        function showError(inputName, message) {
+            const inputField = document.querySelector(`[name="${inputName}"]`);
+            if (inputField) {
+                const errorElement = document.createElement('div');
+                errorElement.className = 'error-message';
+                errorElement.style.color = 'red';
+                errorElement.textContent = message;
+                inputField.parentNode.insertBefore(errorElement, inputField.nextSibling);
+            }
+        }
+        
+        function showPersistentMessage(type, message) {
+    const resultadoDiv = document.getElementById('resultado');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `${type}-message`;
+    messageDiv.style.cssText = `
+        border: 1px solid;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        background-color: ${
+            type === 'success' ? '#d4edda' : '#f8d7da'
+        };
+        color: ${type === 'success' ? '#155724' : '#721c24'};
+    `;
+    messageDiv.innerHTML = `
+        ${message}
+    `;
 
-    <script src="btnEviarForm.js"></script>
+    resultadoDiv.appendChild(messageDiv);
+
+    // Eliminar el mensaje automáticamente después de 5 segundos
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 9000); // 5000 ms = 5 segundos
+}
+
+        
+        </script>
+        
+    <!-- <script>
+
+document.getElementById('formulario').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    // Limpia mensajes previos
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+    // Validaciones del lado del cliente
+    const nombre = document.getElementById('Nombre').value.trim();
+    const apellido = document.getElementById('Apellido').value.trim();
+    let hasErrors = false;
+
+    if (nombre.length < 2) {
+        showError('Nombre', 'El nombre debe tener al menos 2 caracteres.');
+        hasErrors = true;
+    }
+
+    if (apellido.length < 2) {
+        showError('Apellido', 'El apellido debe tener al menos 2 caracteres.');
+        hasErrors = true;
+    }
+
+    if (hasErrors) {
+        return; // Detener el envío si hay errores de validación en el cliente
+    }
+
+    // Crear el FormData
+    const formData = new FormData(this);
+
+    try {
+        const response = await fetch('http://localhost:3000/FormData', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log('Errores recibidos:', errorData.errors);
+
+            if (errorData.errors) {
+                errorData.errors.forEach(err => {
+                    showError(err.param, err.msg);
+                });
+                return;
+            }
+            throw new Error(errorData.error || 'Error desconocido');
+        }
+
+        const result = await response.json();
+        document.getElementById('resultado').innerHTML = `
+            <p style="color: green;">${result.message}</p>
+            <p><a href="http://localhost:3000${result.pdfUrl}" target="_blank">Descargar PDF</a></p>
+        `;
+    } catch (error) {
+        document.getElementById('resultado').textContent = 'Ocurrió un error: ' + error.message;
+    }
+});
+
+function showError(inputName, message) {
+    const inputField = document.querySelector(`[name="${inputName}"]`);
+    if (inputField) {
+        const errorElement = document.createElement('div');
+        errorElement.className = 'error-message';
+        errorElement.style.color = 'red';
+        errorElement.textContent = message;
+        inputField.parentNode.insertBefore(errorElement, inputField.nextSibling);
+    }
+}
+
+
+     </script> -->
+     
 </body>
 </html>
