@@ -54,6 +54,73 @@ app.use('/archivos', express.static(path.join(__dirname, '/archivos')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/Formulario.html'));
 });
+app.post('/FormData', upload.single('archivos'), (req, res) => {
+    const { Nombre, Apellido } = req.body;
+
+    // Verificar si ya existe en la base de datos
+    const checkSql = 'SELECT * FROM Formulario WHERE nombre = ? AND apellido = ?';
+    db.query(checkSql, [Nombre, Apellido], (err, results) => {
+        if (err) {
+            console.error('Error al verificar en la base de datos:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+
+        if (results.length > 0) {
+            // Ya existe
+            const existingPdfUrl = results[0].pdf_path;
+            return res.status(400).json({
+                message: 'El registro ya existe en la base de datos',
+                pdfUrl: existingPdfUrl, // Incluye la URL del PDF existente
+            });
+        }
+
+        // Si no existe, generar un nuevo PDF
+        try {
+            // Leer la imagen subida como Base64
+            const uploadedFile = req.file;
+            const imagePath = path.join(__dirname, '/archivos', uploadedFile.filename);
+            const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' });
+
+            // Crear el PDF usando jsPDF
+            const doc = new jsPDF();
+            doc.text(`Nombre: ${req.body.Nombre}`, 10, 10);
+            doc.text(`Apellido: ${req.body.Apellido}`, 10, 20);
+            doc.text(`Archivo recibido: ${uploadedFile.originalname}`, 10, 30);
+
+            // Agregar la imagen al PDF
+            const fileExtension = path.extname(uploadedFile.originalname).toLowerCase();
+            const imageFormat = fileExtension === '.png' ? 'PNG' : 'JPEG';
+            doc.addImage(`data:image/${imageFormat};base64,${imageBase64}`, imageFormat, 10, 40, 100, 100);
+
+            // Generar un nombre único para el PDF basado en el Nombre del formulario
+            const sanitizedNombre = req.body.Nombre.replace(/[^a-zA-Z0-9]/g, '_'); // Reemplaza caracteres especiales
+            const pdfFileName = `${sanitizedNombre}.pdf`;
+
+            // Guardar el PDF en la carpeta archivos
+            const pdfPath = path.join(__dirname, '/archivos', pdfFileName);
+            const pdfBuffer = doc.output('arraybuffer');
+            fs.writeFileSync(pdfPath, Buffer.from(pdfBuffer));
+
+            // Insertar en la base de datos
+            const insertSql = 'INSERT INTO Formulario (nombre, apellido, pdf_path) VALUES (?, ?, ?)';
+            db.query(insertSql, [Nombre, Apellido, `/archivos/${pdfFileName}`], (err, result) => {
+                if (err) {
+                    console.error('Error al insertar en la base de datos:', err);
+                    return res.status(500).json({ error: 'Error al guardar en la base de datos' });
+                }
+
+                console.log('Datos guardados en la base de datos:', result);
+                return res.json({
+                    message: 'Datos guardados correctamente y PDF generado',
+                    pdfUrl: `/archivos/${pdfFileName}`,
+                });
+            });
+        } catch (error) {
+            console.error('Error al generar el PDF:', error);
+            res.status(500).json({ error: 'Error en la generación del PDF' });
+        }
+    });
+});
 
 // Ruta para  envío  formulario
 //app.post(
@@ -112,35 +179,8 @@ app.get('/', (req, res) => {
     //     }
     // }
 //);
-app.post('/FormData', upload.single('archivos'), (req, res) => {
-    const { Nombre, Apellido } = req.body;
 
-    // Verificar si ya existe en la base de datos
-    const checkSql = 'SELECT * FROM Formulario WHERE nombre = ? AND apellido = ?';
-    db.query(checkSql, [Nombre, Apellido], (err, results) => {
-        if (err) {
-            console.error('Error al verificar en la base de datos:', err);
-            return res.status(500).json({ error: 'Error en el servidor' });
-        }
 
-        if (results.length > 0) {
-            // Ya existe
-            return res.status(400).json({ message: 'El registro ya existe en la base de datos' });
-        }
-
-        // Si no existe, insertar en la base de datos
-        const insertSql = 'INSERT INTO Formulario (nombre, apellido, pdf_path) VALUES (?, ?, ?)';
-        db.query(insertSql, [Nombre, Apellido, `/archivos/${req.file.filename}`], (err, result) => {
-            if (err) {
-                console.error('Error al insertar en la base de datos:', err);
-                return res.status(500).json({ error: 'Error al guardar en la base de datos' });
-            }
-
-            console.log('Datos guardados en la base de datos:', result);
-            return res.json({ message: 'Datos guardados correctamente', pdfUrl: `/archivos/${req.file.filename}` });
-        });
-    });
-});
 
 
 
