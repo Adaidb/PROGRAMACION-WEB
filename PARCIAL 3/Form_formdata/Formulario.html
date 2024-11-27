@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gridjs@6.1.0/dist/gridjs.production.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/gridjs@6.1.0/dist/gridjs.min.css" rel="stylesheet">
+    
     <title>Generador de PDF</title>
     <style>
         body {
@@ -34,9 +36,19 @@
             color: white;
             border: none;
             cursor: pointer;
+            font-size: 16px;
+            text-align: center;
         }
         button:hover {
             background-color: #0056b3;
+        }
+        button:active {
+            background-color: #004085;
+            transform: translateY(1px);
+        }
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.5);
         }
         .result {
             margin: 20px auto;
@@ -44,6 +56,39 @@
             text-align: center;
             color: red;
         }
+        #grid-container {
+            margin-top: 30px;
+            width: 100%;
+            height: 400px; 
+        }
+        #btnMostrarDB {
+            width: 90%;
+            margin-top: 20px;
+        }
+        button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        .gridjs-pagination button {
+            width: 10%;
+    font-size: 12px;  /* Tamaño de fuente más pequeño */
+    padding: 5px 10px;  /* Reducir el padding */
+    margin: 0 5px;  /* Espaciado entre los botones */
+    border-radius: 5px;  /* Bordes redondeados */
+    border: 1px solid #ccc;  /* Borde más delgado */
+}
+
+/* Estilo para los botones de búsqueda */
+.gridjs-search input {
+    font-size: 12px;  /* Tamaño de fuente más pequeño */
+    padding: 5px;  /* Reducir el padding */
+    margin: 0;  /* Eliminar márgenes */
+    border-radius: 5px;  /* Bordes redondeados */
+    border: 1px solid #ccc;  /* Borde más delgado */
+}
     </style>
 </head>
 <body>
@@ -58,182 +103,137 @@
         <label for="Archivo">Subir Archivo (JPG, JPEG, PNG):</label>
         <input type="file" id="archivos" name="archivos" accept="image/jpeg, image/png" required>
     
-        <button class="btnenviar" id="btnenv" type="button">Enviar</button>
-
+        <button  id="btnenv" type="button">Enviar</button>
+        <button id="btnMostrarDB" type="button">Mostrar Base de Datos</button>
     </form>
+  
     
+  
     <div class="result" id="resultado"></div>
+    <div id="grid-container"></div>
     
     <script>
-      document.getElementById('btnenv').addEventListener('click', async function (event) {
-    event.preventDefault(); // Evita cualquier comportamiento predeterminado del botón
+        // Función de enviar formulario
+        document.getElementById('btnenv').addEventListener('click', async function (event) {
+            event.preventDefault(); // Evita cualquier comportamiento predeterminado del botón
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = ''; // Limpia mensajes previos
 
-    const resultadoDiv = document.getElementById('resultado');
-    resultadoDiv.innerHTML = ''; // Limpia mensajes previos
+            // Crear el FormData
+            const formData = new FormData(document.getElementById('formulario'));
 
-    // Validaciones del lado del cliente
-    const nombre = document.getElementById('Nombre').value.trim();
-    const apellido = document.getElementById('Apellido').value.trim();
-    let hasErrors = false;
+            try {
+                const response = await fetch('http://localhost:3000/FormData', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-    if (nombre.length < 2) {
-        showError('Nombre', 'El nombre debe tener al menos 2 caracteres.');
-        hasErrors = true;
-    }
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData.errors) {
+                        // Mostrar los errores de validación
+                        errorData.errors.forEach(err => {
+                            showError(err.param, err.msg);
+                        });
+                        return;
+                    }
 
-    if (apellido.length < 2) {
-        showError('Apellido', 'El apellido debe tener al menos 2 caracteres.');
-        hasErrors = true;
-    }
+                    if (errorData.message) {
+                        showPersistentMessage('error', `
+                            ${errorData.message}<br>
+                            <a href="http://localhost:3000${errorData.pdfUrl}" target="_blank">Descargar PDF existente</a>
+                        `);
+                        return;
+                    }
 
-    if (hasErrors) {
-        return; // Detener el envío si hay errores
-    }
+                    throw new Error(errorData.error || 'Error desconocido');
+                }
 
-    // Crear el FormData
-    const formData = new FormData(document.getElementById('formulario'));
-
-    try {
-        const response = await fetch('http://localhost:3000/FormData', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            if (errorData.message) {
-                showPersistentMessage('error', `
-                    ${errorData.message}<br>
-                    <a href="http://localhost:3000${errorData.pdfUrl}" target="_blank">Descargar PDF existente</a>
+                const result = await response.json();
+                showPersistentMessage('success', `
+                    ${result.message}<br>
+                    <a href="http://localhost:3000${result.pdfUrl}" target="_blank">Descargar PDF</a>
                 `);
-                return;
+            } catch (error) {
+                showPersistentMessage('error', 'Ocurrió un error: ' + error.message);
             }
-
-            if (errorData.errors) {
-                errorData.errors.forEach(err => {
-                    showError(err.param, err.msg);
-                });
-                return;
-            }
-
-            throw new Error(errorData.error || 'Error desconocido');
-        }
-
-        const result = await response.json();
-        showPersistentMessage('success', `
-            ${result.message}<br>
-            <a href="http://localhost:3000${result.pdfUrl}" target="_blank">Descargar PDF</a>
-        `);
-    } catch (error) {
-        showPersistentMessage('error', 'Ocurrió un error: ' + error.message);
-    }
-});
-
-function showError(inputName, message) {
-    const inputField = document.querySelector(`[name="${inputName}"]`);
-    if (inputField) {
-        const errorElement = document.createElement('div');
-        errorElement.className = 'error-message';
-        errorElement.style.color = 'red';
-        errorElement.textContent = message;
-        inputField.parentNode.insertBefore(errorElement, inputField.nextSibling);
-    }
-}
-
-function showPersistentMessage(type, message) {
-    const resultadoDiv = document.getElementById('resultado');
-    resultadoDiv.innerHTML = ''; // Limpia mensajes previos
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `${type}-message`;
-    messageDiv.style.cssText = `
-        border: 1px solid;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: 5px;
-        background-color: ${
-            type === 'success' ? '#d4edda' : '#f8d7da'
-        };
-        color: ${type === 'success' ? '#155724' : '#721c24'};
-    `;
-    messageDiv.innerHTML = `${message}`;
-    resultadoDiv.appendChild(messageDiv);
-}
-
-        
-        </script>
-        
-    <!-- <script>
-
-document.getElementById('formulario').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    // Limpia mensajes previos
-    document.querySelectorAll('.error-message').forEach(el => el.remove());
-
-    // Validaciones del lado del cliente
-    const nombre = document.getElementById('Nombre').value.trim();
-    const apellido = document.getElementById('Apellido').value.trim();
-    let hasErrors = false;
-
-    if (nombre.length < 2) {
-        showError('Nombre', 'El nombre debe tener al menos 2 caracteres.');
-        hasErrors = true;
-    }
-
-    if (apellido.length < 2) {
-        showError('Apellido', 'El apellido debe tener al menos 2 caracteres.');
-        hasErrors = true;
-    }
-
-    if (hasErrors) {
-        return; // Detener el envío si hay errores de validación en el cliente
-    }
-
-    // Crear el FormData
-    const formData = new FormData(this);
-
-    try {
-        const response = await fetch('http://localhost:3000/FormData', {
-            method: 'POST',
-            body: formData
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.log('Errores recibidos:', errorData.errors);
+        // Función para mostrar base de datos
+        document.getElementById('btnMostrarDB').addEventListener('click', async function () {
+            const gridContainer = document.getElementById('grid-container');
+            gridContainer.innerHTML = '<p>Cargando datos...</p>';
 
-            if (errorData.errors) {
-                errorData.errors.forEach(err => {
-                    showError(err.param, err.msg);
+            try {
+                const response = await fetch('http://localhost:3000/api/formulario');
+                if (!response.ok) {
+                    throw new Error('No se pudo obtener los datos de la base de datos');
+                }
+
+                const data = await response.json();
+                console.log('Datos recibidos:', data); // Verifica si los datos llegan correctamente
+
+                if (data.length === 0) {
+                    gridContainer.innerHTML = '<p>No hay datos disponibles.</p>';
+                    return;
+                }
+                gridContainer.innerHTML = ''; // Limpia el contenedor antes de mostrar el grid
+
+                // Crear el grid
+                const grid = new gridjs.Grid({
+                    columns: ["ID", "Nombre", "Apellido", "Archivo", "PDF", "Fecha de Registro"],
+                    data: data.map(item => [
+                        item.id, 
+                        item.nombre, 
+                        item.apellido, 
+                        item.pdf_path ? `<a href="http://localhost:3000${item.pdf_path}" "` : "No Disponible",
+                        item.pdf_path ? `"http://localhost:3000${item.pdf_path}" ` : "No Disponible",
+                        item.created_at ? formatDate(item.created_at) : 'No Disponible'// Formato: día/mes/año
+                    ]),
+                    search: true,
+                    pagination: {
+                        enabled: true, 
+                        limit: 5,
+                    },
+                    sort: true,
+                    language: {
+                        'pagination': {
+                            'previous': 'Anterior',
+                            'next': 'Siguiente',
+                        }
+                    },
                 });
-                return;
+
+                grid.render(gridContainer); // Renderiza el grid
+
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+                gridContainer.innerHTML = `<p style="color: red;">Error al cargar los datos: ${error.message}</p>`;
             }
-            throw new Error(errorData.error || 'Error desconocido');
-        }
+        });
 
-        const result = await response.json();
-        document.getElementById('resultado').innerHTML = `
-            <p style="color: green;">${result.message}</p>
-            <p><a href="http://localhost:3000${result.pdfUrl}" target="_blank">Descargar PDF</a></p>
-        `;
-    } catch (error) {
-        document.getElementById('resultado').textContent = 'Ocurrió un error: ' + error.message;
-    }
-});
-
-function showError(inputName, message) {
-    const inputField = document.querySelector(`[name="${inputName}"]`);
-    if (inputField) {
-        const errorElement = document.createElement('div');
-        errorElement.className = 'error-message';
-        errorElement.style.color = 'red';
-        errorElement.textContent = message;
-        inputField.parentNode.insertBefore(errorElement, inputField.nextSibling);
-    }
+        function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date)) return 'Fecha Inválida'; // Si la fecha no es válida, mostramos un mensaje
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`; // dd/mm/yyyy
 }
-
-
-     </script> -->
-     
+        // Mostrar mensajes de error persistentes
+        function showPersistentMessage(type, message) {
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = ''; // Limpia mensajes previos
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${type}-message`;
+            messageDiv.style.cssText = `
+                border: 1px solid;
+                padding: 10px;
+                margin-top: 10px;
+                border-radius: 5px;
+                background-color: ${{success: '#d4edda', error: '#f8d7da'}[type]};
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+            `;
+            messageDiv.innerHTML = `${message}`;
+            resultadoDiv.appendChild(messageDiv);
+        }
+    </script>
 </body>
 </html>

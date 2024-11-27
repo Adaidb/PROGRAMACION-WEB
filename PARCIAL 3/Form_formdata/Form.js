@@ -53,8 +53,32 @@ app.use('/archivos', express.static(path.join(__dirname, '/archivos')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/Formulario.html'));
+   
 });
-app.post('/FormData', upload.single('archivos'), (req, res) => {
+
+
+app.get('/api/formulario', (req, res) => {
+    const sql = 'SELECT * FROM Formulario'; // Asegúrate de que la consulta SQL es correcta
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error al obtener los datos de la base de datos:', err);
+            return res.status(500).json({ error: 'Error en la base de datos', details: err });
+        }
+    
+        console.log('Resultados obtenidos:', results);  // Esto te permitirá ver los datos obtenidos de la base de datos.
+        return res.json(results); // Devolvemos los datos como JSON
+    });
+});
+app.post('/FormData', upload.single('archivos'), [
+    check('Nombre').isLength({ min: 2 }).withMessage('El nombre debe tener al menos 2 caracteres.'),
+    check('Apellido').isLength({ min: 2 }).withMessage('El apellido debe tener al menos 2 caracteres.')
+], (req, res) => {
+    // Validación de datos
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     const { Nombre, Apellido } = req.body;
 
     // Verificar si ya existe en la base de datos
